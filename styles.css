@@ -1,0 +1,894 @@
+/* /* *
+  Нормализация блочной модели
+ */
+ *,
+ ::before,
+ ::after {
+   box-sizing: border-box;
+ }
+ 
+ /**
+   Убираем внутренние отступы слева тегам списков,
+   у которых есть атрибут class
+  */
+ :where(ul, ol):where([class]) {
+   padding-left: 0;
+ }
+ 
+ /**
+   Убираем внешние отступы body и двум другим тегам,
+   у которых есть атрибут class
+  */
+ body,
+ :where(blockquote, figure):where([class]) {
+   margin: 0;
+ }
+ 
+ /**
+   Убираем внешние отступы вертикали нужным тегам,
+   у которых есть атрибут class
+  */
+ :where(
+   h1,
+   h2,
+   h3,
+   h4,
+   h5,
+   h6,
+   p,
+   ul,
+   ol,
+   dl
+ ):where([class]) {
+   margin-block: 0;
+ }
+ 
+ :where(dd[class]) {
+   margin-left: 0;
+ }
+ 
+ :where(fieldset[class]) {
+   margin-left: 0;
+   padding: 0;
+   border: none;
+ }
+ 
+ /**
+   Убираем стандартный маркер маркированному списку,
+   у которого есть атрибут class
+  */
+ :where(ul[class]) {
+   list-style: none;
+ }
+ 
+ :where(address[class]) {
+   font-style: normal;
+ }
+ 
+ /**
+   Обнуляем вертикальные внешние отступы параграфа,
+   объявляем локальную переменную для внешнего отступа вниз,
+   чтобы избежать взаимодействие с более сложным селектором
+  */
+ p {
+   --paragraphMarginBottom: 24px;
+ 
+   margin-block: 0;
+ }
+ 
+ /**
+   Внешний отступ вниз для параграфа без атрибута class,
+   который расположен не последним среди своих соседних элементов
+  */
+ p:where(:not([class]):not(:last-child)) {
+   margin-bottom: var(--paragraphMarginBottom);
+ }
+ 
+ 
+ /**
+   Упрощаем работу с изображениями и видео
+  */
+ img,
+ video {
+   display: block;
+   max-width: 100%;
+   height: auto;
+ }
+ 
+ /**
+   Наследуем свойства шрифт для полей ввода
+  */
+ input,
+ textarea,
+ select,
+ button {
+   font: inherit;
+ }
+ 
+ html {
+   /**
+     Пригодится в большинстве ситуаций
+     (когда, например, нужно будет "прижать" футер к низу сайта)
+    */
+   height: 100%;
+   /**
+     Убираем скачок интерфейса по горизонтали
+     при появлении / исчезновении скроллбара
+    */
+   scrollbar-gutter: stable;
+ }
+ 
+ /**
+   Плавный скролл
+  */
+ html,
+ :has(:target) {
+   scroll-behavior: smooth;
+ }
+ 
+ body {
+   /**
+     Пригодится в большинстве ситуаций
+     (когда, например, нужно будет "прижать" футер к низу сайта)
+    */
+   min-height: 100%;
+   /**
+     Унифицированный интерлиньяж
+    */
+   line-height: 1.5;
+ }
+ 
+ /**
+   Нормализация высоты элемента ссылки при его инспектировании в DevTools
+  */
+ a:where([class]) {
+   display: inline-flex;
+ }
+ 
+ /**
+   Курсор-рука при наведении на элемент
+  */
+ button,
+ label {
+   cursor: pointer;
+ }
+ 
+ /**
+   Приводим к единому цвету svg-элементы
+   (за исключением тех, у которых уже указан
+   атрибут fill со значением 'none' или начинается с 'url')
+  */
+ :where([fill]:not(
+   [fill="none"],
+   [fill^="url"]
+ )) {
+   fill: currentColor;
+ }
+ 
+ /**
+   Приводим к единому цвету svg-элементы
+   (за исключением тех, у которых уже указан
+   атрибут stroke со значением 'none')
+  */
+ :where([stroke]:not(
+   [stroke="none"],
+   [stroke^="url"]
+ )) {
+   stroke: currentColor;
+ }
+ 
+ /**
+   Чиним баг задержки смены цвета при взаимодействии с svg-элементами
+  */
+ svg * {
+   transition-property: fill, stroke;
+ }
+ 
+ /**
+   Приведение рамок таблиц в классический 'collapse' вид
+  */
+ :where(table) {
+   border-collapse: collapse;
+   border-color: currentColor;
+ }
+ 
+ /**
+   Удаляем все анимации и переходы для людей,
+   которые предпочитают их не использовать
+  */
+ @media (prefers-reduced-motion: reduce) {
+   *,
+   ::before,
+   ::after {
+     animation-duration: 0.01ms !important;
+     animation-iteration-count: 1 !important;
+     transition-duration: 0.01ms !important;
+     scroll-behavior: auto !important;
+   }
+ }
+
+
+ @font-face {
+  font-family: 'Poppins';
+  src: url('./Shrifts/Poppins-Regular.woff2') format('woff2');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('./Shrifts/Poppins-Medium.woff2') format('woff2');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('./Shrifts/Poppins-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('./Shrifts/Poppins-Bold.woff2') format('woff2');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('./Shrifts/Poppins-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('./Shrifts/Rubik-Medium.woff2') format('woff2');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('./Shrifts/Rubik-Bold.woff2') format('woff2');
+  font-weight: 700;
+}
+
+
+
+
+body{
+  font-family: Poppins;
+  transform: scale(1);
+  transform-origin: top left;
+  max-width: 2400px; 
+  overflow-x: auto; 
+}
+
+a,
+button,
+input,
+textarea {
+  transition: 0.2s ease-in-out;
+}
+
+
+a{
+  text-decoration: none;
+  color: #FFF;
+}
+
+a:hover{
+  color: orange;
+}
+
+button:hover{
+  color: #E87D0E;
+}
+
+img{
+  max-width: 100%;
+}
+
+.wrapper{
+  width: 100%;
+  background: rgb(0,0,0);
+  background: linear-gradient(181deg, #000 0.82%, #4A2800 129.1%);
+  backdrop-filter: blur(7px);
+}
+
+.header{
+  width: 1400px;
+  margin: 0 auto;
+}
+
+header{
+  padding: 50px 0 0 0;
+}
+
+.header-logo{
+  color: #FFF;
+  font-family: Poppins;
+  font-weight: 800;
+  font-size: 29px;
+  text-transform: uppercase;
+  margin-left: -80px;
+}
+
+.header-menu{
+  float: right;
+  width: 50%;
+
+}
+
+.header-menu-list{
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-menu-link{
+  display: inline-block;
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+
+h1{
+  width: 470px;
+  font-family: Poppins;
+  font-weight: 700;
+  font-size: 50px;
+  margin: 17px 0 26px;
+}
+
+.hero-h2{
+  width: 161.061px;
+  font-size: 20px;
+  font-family: Poppins;
+  font-weight: 700;
+  color: #E87D0E;
+  margin: 0 0 17px 0;
+}
+
+p{
+  width: 527px;
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 16px;
+
+}
+
+.button{
+  width: 195px;
+  height: 53px;
+  border-radius: 40px;
+  background: linear-gradient(92deg, #FA8305 2.08%, #FB9E3C 117.25%);
+  border: none;
+  color: #FFF;
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 16px;
+  margin: 50px 0;
+
+}
+
+.button2{
+  width: 131px;
+  height: 41px;
+  border-radius: 6px;
+  border: none;
+  background: #FA9021;
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 13px;
+  color: #FFF;
+  border-top: 21px;
+
+}
+
+
+.hero-header {
+  color: #FFF;
+  display: flex;
+  padding-left: 147px;
+  position: relative; 
+  height: 100vh; 
+  align-items: center;
+}
+
+.hero-img-gamepad {
+  position: absolute;
+  right: 100px;  
+  top: 407px; 
+  transform: translateY(-50%); 
+  pointer-events: none; 
+}
+
+
+.trends-info{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.trends-h2{
+  font-family: Rubik;
+  font-weight: 700;
+  font-size: 31px;
+  color: #FFF;
+  padding-left: 147px;
+}
+
+.trends-button{
+  float: right;
+  margin-right: 147px;
+  width: 139px;
+  height: 57px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.11);
+  font-family: Rubik;
+  font-weight: 500;
+  font-size: 20px;
+  color: #FFF;
+}
+
+
+.trends-img{
+  display: flex;
+  justify-content: space-between;
+  margin: 57px 147px 25px 147px ;
+  border-radius: 20px;
+}
+
+.trends-meta{
+  display: flex;
+  justify-content: space-between;
+  margin: 0 180px 0 187px;
+}
+
+.trends-comment-info{
+  font-family: Rubik;
+  font-weight: 500;
+  font-size: 22px;
+  color: #FFF;
+}
+
+.trends-meta-info {
+  display: flex;
+  gap: 9px;
+}
+
+
+.lorem-header{
+  display: flex;
+  margin-top: 129px;
+  margin-left: 147px;
+}
+
+
+
+.lorem-h2{
+  font-family: Poppins;
+  font-weight: 600;
+  font-size:35px ;
+  width: 826px;
+  color: #FFF;
+  text-align: center;
+  margin:0 307px 0 307px ;
+
+}
+
+.lorem-h3{
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 30px;
+  color: #FFF;
+  margin-top: 67px;
+}
+
+.lorem-p{
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 16px;
+  color: #FFF;
+  margin-top: 32px;
+}
+
+
+.lorem-img{
+  align-items: center;
+  width: 1400px;
+  border-radius: 5px;
+  margin-top: 46px;
+}
+
+
+.main{
+  background: linear-gradient(149deg, #090300 18.81%, rgba(9, 3, 0, 0.00) 199.4%);
+
+  height: 100%;
+}
+
+.main-container{
+  height: 881px;
+  background: url(./images/Rectangle\ 5.png) no-repeat center center;
+  background-size: 100% ;
+  margin-top: 157px;
+}
+
+.main-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  text-align: center;
+}
+
+
+.main-h2{
+  color: #FFF;
+  font-family: Poppins;
+  font-size: 30px;
+  font-weight: 700;
+  width: 826px;
+  margin-top: 93px;
+}
+
+
+.main-h3{
+  color: #FFF;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 400;
+  width: 826px;
+  margin-top: 25px;
+}
+
+
+ .main-devices {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  gap: 100px;
+  margin: 99px 197px 0 197px;
+}  
+
+.main-blocks{
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  text-align: center;
+}
+
+.block-p{
+  display: flex;
+  margin-top: 30px;
+  color: #FFF;
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.block-img2{
+  display: flex;
+  margin-top: 24px;
+}
+
+
+.main-devices2 {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  margin:62px 0 100px 0;
+  gap: 100px;
+}  
+
+.main-blocks2{
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  text-align: center;
+  
+}
+
+.block-p2{
+  display: flex;
+  margin-top: 30px;
+  color: #FFF;
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 16px;
+  text-align: center;
+  align-items: center;
+}
+
+.block-imgs2{
+  display: flex;
+  margin-top: 24px;
+}
+
+.pre-text{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 148px;
+}
+
+.pre-p{
+  width: 307px;
+  font-family: Poppins;
+  font-weight: 700;
+  font-size: 30px;
+  color: #FFF;
+}
+
+.pre-p2{
+  width: 497px;
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 14px;
+  color: #FFF;
+  margin-top: 15px;
+}
+
+.pre-images-1{
+  display: flex;
+  justify-content: space-between;
+  margin: 71px 135px 33px 135px; 
+  gap: 27px;
+  border-radius: 20px;
+}
+
+.pre-img-1{
+  padding-left: 135px;
+}
+
+.pre-img-3{
+  padding-right:135px ;
+}
+
+.pre-images-2{
+  display: flex;
+  justify-content: space-between;
+  margin: 0 135px 0 135px;
+  gap: 27px;
+  border-radius: 20px;
+}
+
+.pre-img-4{
+  padding-left: 135px;
+}
+
+.pre-img-6{
+  padding-right: 135px;
+}
+
+.pre-button{
+  display: flex;
+  justify-content: center;
+  margin-top: 72px;
+}
+
+.pre-button-item{
+  width: 139px;
+  height: 57px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.11);
+  font-family: Rubik;
+  font-size: 20px;
+  font-weight: 500;
+  color: #FFF;
+  border: none;
+}
+
+.pre-poisk{
+
+  margin: 0 135px 0 135px;
+}
+
+.pre-poisk-text{
+  display: flex;
+  flex-direction: column;
+  margin: 105px 0 74px 135px;
+}
+
+.poisk-p1{
+  display: flex;
+  width: 209px;
+  height: 40px;
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 30px;
+  color: #FFF;
+  margin-bottom: 32px;
+}
+
+.poisk-p2{
+  display: flex;
+  width: 545px;
+  height: 57px;
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 16px;
+  color: #FFF;
+}
+
+.pre-poisk-input{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 135px 0 135px;
+  padding-right: 57px;
+  gap: 42px;
+  width: 1170px;
+  height: 189px;
+  border-radius: 15px;
+  background: #1C140F;
+}
+
+.input-text{
+  padding-left: 56px;
+}
+
+.input-p1{
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 30px;
+  color: #FFF;
+}
+
+.input-p2{
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 17px;
+  color: #FFF;
+  margin-top: 10px;
+}
+
+.poisk-content{
+  width: 385.679px;
+  height: 48px;
+  border-radius: 8px;
+  background: #FFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 99px;
+}
+
+.poisk-input{
+  border: none;
+  font-family: Poppins;
+  font-weight: 300;
+  font-size: 13px;
+  color: #898989;
+}
+
+.poisk-button{
+  width: 104.996px;
+  height: 37px;
+  border-radius: 8px;
+  background: #DC7000;
+  border: none;
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 13px;
+  color: #FFF;
+}
+
+.footer{
+  background: #070707;
+  
+}
+
+.footer-container{
+  display: flex;
+  justify-content: space-between;
+
+  margin: 242px 120px 0 101px;
+}
+
+.footer-logo-info{
+  padding-top: 73px;
+}
+
+.footer-logo-item1{
+  font-family: Poppins;
+  font-weight: 800;
+  font-size: 24px;
+  color: #FFF;
+}
+
+.footer-logo-item2{
+  width: 372px;
+  height: 58px;
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 16px;
+  color: #FFF;
+  margin-top: 15px;
+}
+
+.footer-logo-item3{
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 16px;
+  color: #FFF;
+  margin-top: 25px;
+}
+
+.footer-about-info{
+  padding-top: 73px;
+}
+
+.footer-about-item1{
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 17px;
+  color: #FFF;
+}
+
+.footer-about-link{
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.footer-contact{
+  padding-left: 144px;
+  font-family: Poppins;
+  color: #FFF;
+}
+
+.footer-about-item1{
+  font-weight: 500;
+  font-size: 17px;
+}
+
+.footer-about-item2{
+  width: 282px;
+  height: 76px;
+  margin-top: 15px;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.footer-about-tel{
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 11px;
+}
+
+.footer-images{
+  margin-top: 190px;
+}
+
+.footer-images-info{
+  display: flex;
+  justify-content: space-between;
+}
+
+hr{
+  background: #D2D2D2;
+}
+
+
+.footer-container-2{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-top: 29px;
+}
+
+.footer-end{
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 13px;
+  color: #FFF;
+  margin-bottom: 50px;
+}
